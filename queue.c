@@ -1,0 +1,77 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* head;
+struct Node* tail;
+
+struct Node* GetNewNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode -> data = data;
+    return newNode;
+};
+
+bool IsEmpty() {
+    return head == NULL;
+}
+
+int peek() {
+    if(head != NULL) {
+        return head -> data;
+    } else {
+        return -1;
+    }
+}
+
+void add(int data) {
+    struct Node* newNode = GetNewNode(data);
+
+    if(tail != NULL) {
+        tail -> next = newNode;
+    }
+
+    tail = newNode;
+    if(head == NULL) {
+        head = newNode;
+    }
+}
+
+//int remove() {
+//    int data = head -> data;
+//    head = head -> next;
+//    if(head == NULL) {
+//        tail = NULL;
+//    }
+//
+//    return data;
+//}
+
+void printQueue() {
+    struct Node* temp = head;
+
+    while(temp -> next != NULL) {
+        printf("%d ", temp -> data);
+        temp = temp -> next;
+    }
+}
+
+int main() {
+    head = NULL;
+
+    add(1);
+    add(2);
+    add(3);
+
+    printQueue();
+
+    //remove();
+
+    int headData = peek();
+    printf("headData: %d", headData);
+}
