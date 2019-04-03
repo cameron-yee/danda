@@ -56,7 +56,7 @@ int removeHead() {
 void printQueue() {
     struct Node* temp = head;
 
-    while(temp != NULL) {
+    while(temp -> next != NULL) {
         printf("%d ", temp -> data);
         temp = temp -> next;
     }
