@@ -14,6 +14,7 @@ struct Node* tail;
 struct Node* GetNewNode(int data) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode -> data = data;
+    newNode -> next = NULL;
     return newNode;
 };
 
@@ -42,23 +43,25 @@ void add(int data) {
     }
 }
 
-//int remove() {
-//    int data = head -> data;
-//    head = head -> next;
-//    if(head == NULL) {
-//        tail = NULL;
-//    }
-//
-//    return data;
-//}
+int removeHead() {
+    int data = head -> data;
+    head = head -> next;
+    if(head == NULL) {
+        tail = NULL;
+    }
+
+    return data;
+}
 
 void printQueue() {
     struct Node* temp = head;
 
-    while(temp -> next != NULL) {
+    while(temp != NULL) {
         printf("%d ", temp -> data);
         temp = temp -> next;
     }
+
+    printf("\n");
 }
 
 int main() {
@@ -70,7 +73,9 @@ int main() {
 
     printQueue();
 
-    //remove();
+    removeHead();
+
+    printQueue();
 
     int headData = peek();
     printf("headData: %d", headData);
