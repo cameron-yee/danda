@@ -38,7 +38,9 @@ void removeFromStack() {
         return;
     }
 
+    struct Node* old = head;
     head = head -> next;
+    free(old);
 }
 
 void printStack() {

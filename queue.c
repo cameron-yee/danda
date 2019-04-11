@@ -45,7 +45,10 @@ void add(int data) {
 
 int removeHead() {
     int data = head -> data;
+    struct Node* old = head;
     head = head -> next;
+    free(old);
+
     if(head == NULL) {
         tail = NULL;
     }
