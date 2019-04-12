@@ -1,5 +1,5 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 struct Node {
     int data;
@@ -7,18 +7,25 @@ struct Node {
     struct Node* prev;
 };
 
-struct Node* head;
+struct Node* head; //move this into functions as a parameter
 
-struct Node* GetNewNode(int x) {
+struct Node* node_new(int data) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node)); //malloc allocates memory on the heap so the data will persist
-    newNode->data = x;
+    newNode->data = data;
     newNode->prev = NULL;
     newNode->next = NULL;
     return newNode;
 }
 
+void node_delete(struct Node* node) {
+    if(node != NULL) {
+        free(node);
+        node = NULL;
+    }
+}
+
 void insert_at_head(int x) {
-    struct Node* newNode = GetNewNode(x);
+    struct Node* newNode = node_new(x);
     if(head == NULL) {
         head = newNode;
         return;
@@ -40,7 +47,7 @@ void insert_at_position(int data, int index) {
     int currentPosition = 0;
     while(temp->next != NULL) {
         if(currentPosition == index) {
-            struct Node* newNode = GetNewNode(data);
+            struct Node* newNode = node_new(data);
             newNode->prev = temp->prev;
             newNode->prev->next = newNode;
             newNode->next = temp;
@@ -64,7 +71,7 @@ void insert_at_position(int data, int index) {
 }
 
 void insert_at_tail(int x) {
-    struct Node* newNode = GetNewNode(x);
+    struct Node* newNode = node_new(x);
     if(head == NULL) {
         head = newNode;
         return;
@@ -90,7 +97,7 @@ void delete_head() {
     struct Node* new_head = old_head->next;
     new_head->prev = NULL;
     head = new_head;
-    free(old_head);
+    node_delete(old_head);
 }
 
 void delete_tail() {
@@ -102,37 +109,34 @@ void delete_tail() {
 
     temp = temp->prev;
     temp->next = NULL;
-    free(temp->next);
+    node_delete(temp->next);
 }
 
 void delete_at_position(int position) {
-    int current_position = 0;
-    struct Node* temp = head;
-    if(head == NULL) {
-        return;
-    }
+    struct Node* temp;
+    int current_position;
 
-    while(temp->next != NULL) {
-        if(current_position == position) {
-            temp = temp->prev;
-            temp->next=temp->next->next;
-            temp->next->next->prev = temp;
-            free(temp->next);
-            return;
-        }
+    temp = head;
+    current_position = 0;
 
+    while(temp->next != NULL && current_position < position) {
         temp = temp->next;
         current_position++;
     }
 
-    if(current_position == position) {
-        temp = temp->prev;
-        temp->next = NULL;
-        free(temp->next);
+    if(temp->next == NULL && current_position == position) {
+        node_delete(temp);
         return;
+    } else if(current_position == position) {
+        temp = temp->prev;
+        struct Node* new_next = temp->next->next;
+        node_delete(temp->next);
+        temp->next=new_next;
+        new_next->prev = temp;
+        return;
+    } else {
+        printf("Position out of list range.");
     }
-
-    printf("Position out of list range.");
 }
 
 void print() {
@@ -161,7 +165,7 @@ void reverse_print() {
 
 int main() {
     head = NULL;
-    
+
     printf("insert_at_head(1)\n");
     insert_at_head(1);
     print();
@@ -222,3 +226,9 @@ int main() {
     reverse_print();
     printf("\n");
 }
+
+//TODO
+//1. Check if malloc returns NULL
+//2. Set head global variable as function parameter
+//3. Declare all functions at top of file before setting
+//4. Make file .h for public use
