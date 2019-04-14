@@ -22,24 +22,25 @@ void node_delete(struct Node* node) {
     }
 }
 
-void insert_at_head(struct Node* head, int data) {
+struct Node* insert_at_head(struct Node* head, int data) {
     struct Node* new_node = node_new(data);
     if(head == NULL) {
         head = new_node;
-        return;
+        return head;
     }
 
     head->prev = new_node; //(head*).prev = NewNode    //Reference to head = New Node
     new_node->next = head;
     head = new_node;
+    return head;
 }
 
-void insert_at_position(struct Node* head, int data, int index) {
+struct Node* insert_at_position(struct Node* head, int data, int index) {
     struct Node* temp = head;
 
     if(index == 0) {
-        insert_at_head(head, data);
-        return;
+        head = insert_at_head(head, data);
+        return head;
     }
 
     int currentPosition = 0;
@@ -52,8 +53,8 @@ void insert_at_position(struct Node* head, int data, int index) {
             temp->prev = newNode;
             if(index == 1) {
                 head = newNode->prev; 
+                return head;
             }
-            return;
         }
 
         currentPosition++;
@@ -61,9 +62,10 @@ void insert_at_position(struct Node* head, int data, int index) {
     }
 
     printf("Index out of range.");
+    return head;
 }
 
-void insert_at_tail(struct Node* head, int data) {
+struct Node* insert_at_tail(struct Node* head, int data) {
     struct Node* new_node;
     struct Node* temp;
 
@@ -72,7 +74,7 @@ void insert_at_tail(struct Node* head, int data) {
 
     if(head == NULL) {
         head = new_node;
-        return;
+        return head;
     }
 
 
@@ -82,14 +84,15 @@ void insert_at_tail(struct Node* head, int data) {
 
     temp->next = new_node; //(head*).prev = NewNode
     new_node->prev = temp;
+    return head;
 }
 
-void delete_head(struct Node* head) {
+struct Node* delete_head(struct Node* head) {
     struct Node* old_head;
     struct Node* new_head;
 
     if(head == NULL) {
-        return;
+        return head;
     }
 
     old_head = head;
@@ -98,6 +101,7 @@ void delete_head(struct Node* head) {
     new_head->prev = NULL;
     head = new_head;
     node_delete(old_head);
+    return head;
 }
 
 void delete_tail(struct Node* head) {
