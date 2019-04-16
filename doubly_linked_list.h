@@ -1,21 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//void node_delete(struct Node* node);
-//void insert_at_head(struct Node* node);
-//void insert_at_position(struct Node**, int data, int index);
-//void insert_at_tail(struct Node** head, int data);
-//void delete_head(struct Node** head);
-//void delete_tail(struct Node* head);
-//void delete_at_position(struct Node* head, int position);
-//void print(struct Node* head);
-//void reverse_print(struct Node* head);
-
 struct Node {
     int data;
     struct Node* next;
     struct Node* prev;
 };
+
+void node_delete(struct Node* node);
+void insert_at_head(struct Node** node, int data);
+void insert_at_position(struct Node**, int data, int index);
+void insert_at_tail(struct Node** head, int data);
+void delete_head(struct Node** head);
+void delete_tail(struct Node* head);
+void delete_at_position(struct Node* head, int position);
+void print(struct Node* head);
+void reverse_print(struct Node* head);
+
 
 struct Node* node_new(int data) {
     struct Node* new_node = (struct Node*)malloc(sizeof(struct Node)); //malloc allocates memory on the heap so the data will persist
