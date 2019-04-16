@@ -1,6 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//void node_delete(struct Node* node);
+//void insert_at_head(struct Node* node);
+//void insert_at_position(struct Node**, int data, int index);
+//void insert_at_tail(struct Node** head, int data);
+//void delete_head(struct Node** head);
+//void delete_tail(struct Node* head);
+//void delete_at_position(struct Node* head, int position);
+//void print(struct Node* head);
+//void reverse_print(struct Node* head);
+
 struct Node {
     int data;
     struct Node* next;
@@ -8,12 +18,12 @@ struct Node {
 };
 
 struct Node* node_new(int data) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node)); //malloc allocates memory on the heap so the data will persist
-    newNode->data = data;
-    newNode->prev = NULL;
-    newNode->next = NULL;
-    return newNode;
-}
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node)); //malloc allocates memory on the heap so the data will persist
+    new_node->data = data;
+    new_node->prev = NULL;
+    new_node->next = NULL;
+    return new_node;
+};
 
 void node_delete(struct Node* node) {
     if(node != NULL) {
@@ -22,59 +32,62 @@ void node_delete(struct Node* node) {
     }
 }
 
-struct Node* insert_at_head(struct Node* head, int data) {
+void insert_at_head(struct Node** head, int data) {
     struct Node* new_node = node_new(data);
     if(head == NULL) {
-        head = new_node;
-        return head;
+        *head = new_node;
+        return;
     }
 
-    head->prev = new_node; //(head*).prev = NewNode    //Reference to head = New Node
-    new_node->next = head;
-    head = new_node;
-    return head;
+    (*head)->prev = new_node; //(head*).prev = NewNode    //Reference to head = New Node
+    new_node->next = *head;
+    (*head) = new_node;
+    //return head;
 }
 
-struct Node* insert_at_position(struct Node* head, int data, int index) {
-    struct Node* temp = head;
+void insert_at_position(struct Node** head, int data, int index) {
+    struct Node* temp;
+    int current_position; 
+
+    temp = (*head);
 
     if(index == 0) {
-        head = insert_at_head(head, data);
-        return head;
+        //head = insert_at_head(head, data);
+        insert_at_head(head, data);
+        return;
     }
 
-    int currentPosition = 0;
+    current_position = 0;
     while(temp->next != NULL) {
-        if(currentPosition == index) {
-            struct Node* newNode = node_new(data);
-            newNode->prev = temp->prev;
-            newNode->prev->next = newNode;
-            newNode->next = temp;
-            temp->prev = newNode;
+        if(current_position == index) {
+            struct Node* new_node = node_new(data);
+            new_node->prev = temp->prev;
+            new_node->prev->next = new_node;
+            new_node->next = temp;
+            temp->prev = new_node;
             if(index == 1) {
-                head = newNode->prev; 
-                return head;
+                *head = new_node->prev; 
+                return;
             }
         }
 
-        currentPosition++;
+        current_position++;
         temp = temp->next;
     }
 
     printf("Index out of range.");
-    return head;
 }
 
-struct Node* insert_at_tail(struct Node* head, int data) {
+void insert_at_tail(struct Node** head, int data) {
     struct Node* new_node;
     struct Node* temp;
 
     new_node = node_new(data);
-    temp = head;
+    temp = (*head);
 
     if(head == NULL) {
-        head = new_node;
-        return head;
+        *head = new_node;
+        return;
     }
 
 
@@ -84,24 +97,22 @@ struct Node* insert_at_tail(struct Node* head, int data) {
 
     temp->next = new_node; //(head*).prev = NewNode
     new_node->prev = temp;
-    return head;
 }
 
-struct Node* delete_head(struct Node* head) {
+void delete_head(struct Node** head) {
     struct Node* old_head;
     struct Node* new_head;
 
     if(head == NULL) {
-        return head;
+        return;
     }
 
-    old_head = head;
+    old_head = (*head);
     new_head = old_head->next;
 
     new_head->prev = NULL;
-    head = new_head;
+    *head = new_head;
     node_delete(old_head);
-    return head;
 }
 
 void delete_tail(struct Node* head) {
