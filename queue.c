@@ -8,78 +8,81 @@ struct Node {
     struct Node* next;
 };
 
-struct Node* head;
-struct Node* tail;
-
-struct Node* GetNewNode(int data) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode -> data = data;
-    newNode -> next = NULL;
-    return newNode;
+struct Node* node_new(int data) {
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    new_node->data = data;
+    new_node->next = NULL;
+    return new_node;
 };
 
-bool IsEmpty() {
+bool IsEmpty(struct Node** head) {
     return head == NULL;
 }
 
-int peek() {
+int peek(struct Node** head) {
     if(head != NULL) {
-        return head -> data;
+        return (*head)->data;
     } else {
         return -1;
     }
 }
 
-void add(int data) {
-    struct Node* newNode = GetNewNode(data);
+void add(struct Node** head, struct Node** tail, int data) {
+    struct Node* new_node = node_new(data);
 
     if(tail != NULL) {
-        tail -> next = newNode;
+        (*tail)->next = new_node;
     }
 
-    tail = newNode;
+    *tail = new_node;
     if(head == NULL) {
-        head = newNode;
+        *head = new_node;
     }
 }
 
-int removeHead() {
-    int data = head -> data;
-    struct Node* old = head;
-    head = head -> next;
+int removeHead(struct Node** head, struct Node** tail) {
+    int data = (*head)->data;
+    struct Node* old = *head;
+    *head = (*head)->next;
     free(old);
 
     if(head == NULL) {
-        tail = NULL;
+        *tail = NULL;
     }
 
     return data;
 }
 
-void printQueue() {
-    struct Node* temp = head;
+void printQueue(struct Node** head) {
+    struct Node* temp = *head;
 
-    while(temp -> next != NULL) {
-        printf("%d ", temp -> data);
-        temp = temp -> next;
+    while(temp->next != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
     }
 
     printf("\n");
 }
 
 int main() {
-    head = NULL;
+    struct Node* head;
+    struct Node* tail;
 
-    add(1);
-    add(2);
-    add(3);
+    head = node_new(1);
+    tail = head;
 
-    printQueue();
+    add(&head, &tail, 1);
+    add(&head, &tail, 2);
+    add(&head, &tail, 3);
 
-    removeHead();
+    printQueue(&head);
 
-    printQueue();
+    removeHead(&head, &tail);
 
-    int headData = peek();
+    printQueue(&head);
+
+    int headData = peek(&head);
     printf("headData: %d", headData);
+
+    return 0;
 }
