@@ -4,12 +4,16 @@
 
 int main() {
     struct Node* head;
-    char data[] = "Hello";
-    char more_data[] = "World";
+    char key[] = "Cameron";
+    char key2[] = "World";
 
-    head = node_new(data);
+    head = node_new(key, 1);
 
-    add_node_to_head(&head, more_data);
+    add_node_to_head(&head, key2, 0);
+
+    print_list(head);
+
+    delete_head_node(&head);
 
     print_list(head);
 

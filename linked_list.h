@@ -1,30 +1,48 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 struct Node {
     struct Node* next;
-    char value[];
+    int value;
+    char key[];
 };
 
-struct Node* node_new(char value[]) {
+size_t length(char list[]); 
+struct Node* node_new(char key[], int value);
+void add_node_to_head(struct Node** head, char key[], int value);
+void print_list(struct Node* head);
+void delete_head_node(struct Node** head);
+
+size_t length(char list[]) {
+    size_t i;
+
+    i = 0;
+    while(list[i] != '\0') {
+        i++;
+    }
+
+    return i;
+}
+
+struct Node* node_new(char key[], int value) {
     struct Node* new_node;
 
     new_node = (struct Node*)malloc(sizeof(struct Node));
 
-    for(size_t i = 0; i < strlen(value); i++) {
-        new_node->value[i] = value[i];
+    for(size_t i = 0; i < length(key); i++) {
+        new_node->key[i] = key[i];
     }
-    //new_node->value = value;
+
     new_node->next = NULL;
+    new_node->value = value;
 
     return new_node;
 }
 
-void add_node_to_head(struct Node** head, char value[]) {
+void add_node_to_head(struct Node** head, char key[], int value) {
     struct Node* new_node;
 
-    new_node = node_new(value);
+    new_node = node_new(key, value);
 
     if(head == NULL) {
         *head = new_node;
@@ -36,13 +54,30 @@ void add_node_to_head(struct Node** head, char value[]) {
     (*head) = new_node;
 }
 
+void delete_node_from_memory(struct Node* node) {
+    if(node != NULL) {
+        free(node);
+    }
+}
+
+void delete_head_node(struct Node** head) {
+    if(head == NULL) {
+        return;
+    }
+
+    *head = (*head)->next;
+    delete_node_from_memory(*head);
+}
+
 void print_list(struct Node* head) {
     struct Node* temp;
 
     temp = head;
 
     while(temp != NULL) {
-        printf("%s\n", temp->value);
+        printf("(%s, %d), ", temp->key, temp->value);
         temp = temp->next;
     }
+
+    printf("\n");
 }
