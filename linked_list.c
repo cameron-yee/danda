@@ -13,6 +13,10 @@ int main() {
 
     print_list(head);
 
+    int wanted_data = get_node_data_by_lookup(head, key);
+
+    printf("%d\n", wanted_data);
+
     delete_head_node(&head);
 
     print_list(head);

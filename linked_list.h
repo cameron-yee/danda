@@ -69,6 +69,39 @@ void delete_head_node(struct Node** head) {
     delete_node_from_memory(*head);
 }
 
+int get_node_data_by_lookup(struct Node* head, char key[]) {
+    struct Node* temp;
+    struct Node* match;
+
+    match = NULL;
+    temp = head;
+    while(temp != NULL) {
+        if(match != NULL) {
+            return match->value;
+        }
+
+        printf("%s, %s\n", key, temp->key);
+        for(size_t i = 0; i < length(key); i++) {
+            printf("%d, %d\n", key[i], temp->key[i]);
+            if(key[i] != temp->key[i]) {
+                match = NULL;
+                break;
+            } else {
+                printf("%s\n", temp->key);
+                match = temp;
+            }
+        }
+
+        temp = temp->next;
+    }
+
+    if(match != NULL) {
+        return match->value;
+    }
+
+    return -1;
+}
+
 void print_list(struct Node* head) {
     struct Node* temp;
 
