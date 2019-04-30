@@ -23,7 +23,7 @@ int *get_sorted_list(int *list, size_t list_length) {
             temp = list[i];
             list[i] = list[i+1];
             list[i+1] = temp;
-            i = 0;
+            i = -1;
         }
     }
 
