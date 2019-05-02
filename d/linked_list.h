@@ -1,4 +1,4 @@
-include <stdlib.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 struct Node {
@@ -28,6 +28,11 @@ struct Node* node_new(char key[], int value) {
     struct Node* new_node;
 
     new_node = (struct Node*)malloc(sizeof(struct Node));
+
+    if(new_node == NULL) {
+        printf("Error during malloc.");
+        exit(1);
+    }
 
     for(size_t i = 0; i < length(key); i++) {
         new_node->key[i] = key[i];
