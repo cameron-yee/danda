@@ -17,5 +17,9 @@ int main() {
 
     printf("%d\n", table->linked_lists[9]->value);
 
+    add_value_to_table(&table, person, 19);
+
+    printf("%d\n", table->linked_lists[9]->value);
+
     return 0;
 }

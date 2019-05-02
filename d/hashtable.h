@@ -40,7 +40,9 @@ size_t get_hash_index(char key[]) {
 }
 
 void add_value_to_table(struct Table** table, char key[], int value) {
+    int same;
     size_t hash_index;
+    struct Node* temp;
 
     hash_index = get_hash_index(key);
 
@@ -49,8 +51,28 @@ void add_value_to_table(struct Table** table, char key[], int value) {
         if(hash_index == i) {
             if((*table)->linked_lists[i] == NULL) {
                 (*table)->linked_lists[i] = node_new(key, value);
+                break;
             } else {
-                add_node_to_head(&((*table)->linked_lists[i]), key, value);
+                temp = (*table)->linked_lists[i];
+                same = 1;
+                //TODO: got an infinite loop here
+                while(temp != NULL) {
+                    for(size_t x = 0; x < length(temp->key); x++) {
+                        if(temp->key[x] != key[x]) {
+                            same = 0;
+                            temp = temp->next;
+                            break;
+                        }
+                    }
+                }
+
+                if(same == 1) {
+                    temp->value = value;
+                    break;
+                } else {
+                    add_node_to_head(&((*table)->linked_lists[i]), key, value);
+                    break;
+                }
             }
         }
     }
