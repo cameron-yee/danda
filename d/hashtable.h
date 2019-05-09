@@ -60,10 +60,15 @@ void add_value_to_table(struct Table** table, char key[], int value) {
                     for(size_t x = 0; x < length(temp->key); x++) {
                         if(temp->key[x] != key[x]) {
                             same = 0;
-                            temp = temp->next;
                             break;
                         }
                     }
+
+                    if(same == 1) {
+                        break;
+                    }
+
+                    temp = temp->next;
                 }
 
                 if(same == 1) {
