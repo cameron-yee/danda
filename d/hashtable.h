@@ -39,47 +39,62 @@ size_t get_hash_index(char key[]) {
     return key_sum%10;
 }
 
+struct Node* compare_keys(struct Node* head, char key[]) {
+    size_t same;
+    struct Node* temp;
+
+    temp = head;
+
+    same = 1;
+    while(temp != NULL) {
+        for(size_t x = 0; x < length(temp->key); x++) {
+            if(temp->key[x] != key[x]) {
+                same = 0;
+                break;
+            }
+        }
+
+        if(same == 1) {
+            break;
+        }
+
+        temp = temp->next;
+    }
+
+    if(same == 1) {
+        return temp;
+    }
+
+    return NULL;
+}
+
 void add_value_to_table(struct Table** table, char key[], int value) {
-    int same;
     size_t hash_index;
     struct Node* temp;
 
     hash_index = get_hash_index(key);
 
-    //TODO: check if value exists in list and add it or update depending
-    for(size_t i = 0; i < (*table)->size; i++) {
-        if(hash_index == i) {
-            if((*table)->linked_lists[i] == NULL) {
-                (*table)->linked_lists[i] = node_new(key, value);
-                break;
-            } else {
-                temp = (*table)->linked_lists[i];
-                same = 1;
-                //TODO: got an infinite loop here
-                while(temp != NULL) {
-                    for(size_t x = 0; x < length(temp->key); x++) {
-                        if(temp->key[x] != key[x]) {
-                            same = 0;
-                            break;
-                        }
-                    }
+    if((*table)->linked_lists[hash_index] == NULL) {
+        printf("%lu\n", hash_index);
+        (*table)->linked_lists[hash_index] = node_new(key, value);
+    } else {
+        temp = compare_keys((*table)->linked_lists[hash_index], key);
 
-                    if(same == 1) {
-                        break;
-                    }
-
-                    temp = temp->next;
-                }
-
-                if(same == 1) {
-                    temp->value = value;
-                    break;
-                } else {
-                    add_node_to_head(&((*table)->linked_lists[i]), key, value);
-                    break;
-                }
-            }
+        if(temp != NULL) {
+            temp->value = value;
+        } else {
+            add_node_to_head(&((*table)->linked_lists[hash_index]), key, value);
         }
     }
 }
 
+
+//int* get_value(struct Table** table, char key[]) {
+//    size_t value_index;
+//    struct Node* temp;
+//
+//    value_index = get_hash_index(key);
+//
+//
+//    temp = (*table)->linked_lists[value_index];
+//}

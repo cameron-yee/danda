@@ -27,6 +27,7 @@ size_t length(char list[]) {
 struct Node* node_new(char key[], int value) {
     struct Node* new_node;
 
+    //Malloc error on this line.
     new_node = (struct Node*)malloc(sizeof(struct Node));
 
     if(new_node == NULL) {
@@ -41,6 +42,7 @@ struct Node* node_new(char key[], int value) {
     new_node->next = NULL;
     new_node->value = value;
 
+    printf("h5\n");
     return new_node;
 }
 
