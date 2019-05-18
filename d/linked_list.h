@@ -4,7 +4,8 @@
 struct Node {
     struct Node* next;
     int value;
-    char key[];
+    //TODO: make this a char *
+    char *key;
 };
 
 size_t length(char list[]); 
@@ -13,7 +14,7 @@ void add_node_to_head(struct Node** head, char key[], int value);
 void print_list(struct Node* head);
 void delete_head_node(struct Node** head);
 
-size_t length(char list[]) {
+size_t length(char *list) {
     size_t i;
 
     i = 0;
@@ -24,8 +25,10 @@ size_t length(char list[]) {
     return i;
 }
 
-struct Node* node_new(char key[], int value) {
+//TODO: pass in char * instead of []
+struct Node* node_new(char *key, int value) {
     struct Node* new_node;
+    //char *key_pointer;
 
     //Malloc error on this line.
     new_node = (struct Node*)malloc(sizeof(struct Node));
@@ -35,18 +38,20 @@ struct Node* node_new(char key[], int value) {
         exit(1);
     }
 
-    for(size_t i = 0; i < length(key); i++) {
-        new_node->key[i] = key[i];
-    }
+    //Not sure if this is right
+    //for(size_t i = 0; i < length(key); i++) {
+    //    new_node->key[i] = key[i];
+    //}
 
     new_node->next = NULL;
     new_node->value = value;
+    new_node->key = key;
 
-    printf("h5\n");
     return new_node;
 }
 
-void add_node_to_head(struct Node** head, char key[], int value) {
+//TODO: pass in char * instead of []
+void add_node_to_head(struct Node** head, char *key, int value) {
     struct Node* new_node;
 
     new_node = node_new(key, value);
@@ -76,7 +81,8 @@ void delete_head_node(struct Node** head) {
     delete_node_from_memory(*head);
 }
 
-int get_node_data_by_lookup(struct Node* head, char key[]) {
+//TODO: pass in char * instead of []
+int get_node_data_by_lookup(struct Node* head, char *key) {
     struct Node* temp;
     struct Node* match;
 

@@ -4,7 +4,9 @@
 
 struct Table {
     size_t size;
-    struct Node* linked_lists[];
+    //TODO: change this to a pointer to list???
+    //struct Node* linked_lists[];
+    struct Node* *linked_lists;
 };
 
 struct Table* table_new(size_t size) {
@@ -26,7 +28,7 @@ struct Table* table_new(size_t size) {
     return new_table;
 }
 
-size_t get_hash_index(char key[]) {
+size_t get_hash_index(char *key) {
     size_t key_sum;
 
     key_sum = 0;
@@ -39,7 +41,7 @@ size_t get_hash_index(char key[]) {
     return key_sum%10;
 }
 
-struct Node* compare_keys(struct Node* head, char key[]) {
+struct Node* compare_keys(struct Node* head, char *key) {
     size_t same;
     struct Node* temp;
 
@@ -68,7 +70,7 @@ struct Node* compare_keys(struct Node* head, char key[]) {
     return NULL;
 }
 
-void add_value_to_table(struct Table** table, char key[], int value) {
+void add_value_to_table(struct Table** table, char *key, int value) {
     size_t hash_index;
     struct Node* temp;
 
