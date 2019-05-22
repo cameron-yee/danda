@@ -10,7 +10,7 @@ struct Table {
     //TODO: change this to a pointer to list???
     //struct Node* linked_lists[];
     //struct Node* linked_lists;
-    struct Node linked_lists[];
+    struct Node *linked_lists[10];
 };
 
 struct Table* table_new(size_t size);

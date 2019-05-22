@@ -81,7 +81,7 @@ int get_node_data_by_lookup(struct Node* head, char *key) {
             return match->value;
         }
 
-        printf("%s, %s\n", key, temp->key);
+        //printf("%s, %s\n", key, temp->key);
         for(size_t i = 0; i < length(key); i++) {
             printf("%d, %d\n", key[i], temp->key[i]);
             if(key[i] != temp->key[i]) {

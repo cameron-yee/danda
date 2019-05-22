@@ -15,9 +15,9 @@ struct Table* table_new(size_t size) {
 
     new_table->size = size;
 
-    //for(size_t i = 0; i < size; i++) {
-    //    new_table->linked_lists[i] = NULL;
-    //}
+    for(size_t i = 0; i < size; i++) {
+        new_table->linked_lists[i] = NULL;
+    }
 
     return new_table;
 }
@@ -30,7 +30,7 @@ size_t get_hash_index(char *key) {
         key_sum = key_sum + key[i];
     }
 
-    printf("%lu\n", key_sum);
+    //printf("%lu\n", key_sum);
 
     return key_sum%10;
 }
@@ -67,22 +67,22 @@ struct Node* compare_keys(struct Node* head, char *key) {
 void add_value_to_table(struct Table** table, char *key, int value) {
     size_t hash_index;
     struct Node* temp;
+    struct Node* hash_index_head;
 
     hash_index = get_hash_index(key);
 
-    if(&((*table)->linked_lists[hash_index]) == NULL) {
-        printf("%lu\n", hash_index);
-        struct Node* point = &(*table)->linked_lists[hash_index];
-        point = node_new(key, value);
+    hash_index_head = (*table)->linked_lists[hash_index];
+    if(hash_index_head == NULL) {
+        //printf("%lu\n", hash_index);
+        (*table)->linked_lists[hash_index] = node_new(key, value);
     } else {
-        temp = compare_keys(&((*table)->linked_lists[hash_index]), key);
+        temp = compare_keys((*table)->linked_lists[hash_index], key);
 
         if(temp != NULL) {
             temp->value = value;
         } else {
-            struct Node* spot = &(*table)->linked_lists[hash_index];
-            struct Node** spot_2 = &spot;
-            add_node_to_head(spot_2, key, value);
+            struct Node* spot = (*table)->linked_lists[hash_index];
+            add_node_to_head(&spot, key, value);
         }
     }
 }
@@ -98,6 +98,9 @@ void add_value_to_table(struct Table** table, char *key, int value) {
 //    temp = (*table)->linked_lists[value_index];
 //}
 
+//
+// gcc -Wall linked_list.c hashtable.c -o hashtable
+//
 int main() {
     size_t index;
 
@@ -116,16 +119,21 @@ int main() {
     printf("1. %lu\n", index);
 
     table = table_new(10);
+
+    //for(size_t i = 0; i < 10; i++) {
+    //    printf("%lu: %d\n", i, table->linked_lists[i]->value);
+    //}
+
     printf("2. %lu\n", table->size);
 
     add_value_to_table(&table, person, 1);
-    printf("3. %d\n", table->linked_lists[9].value);
+    printf("3. %d\n", table->linked_lists[9]->value);
 
     add_value_to_table(&table, person, 2);
-    printf("4. %d\n", table->linked_lists[9].value);
+    printf("4. %d\n", table->linked_lists[9]->value);
 
     add_value_to_table(&table, person_2, 3);
-    printf("5. %d\n", table->linked_lists[6].value);
+    printf("5. %d\n", table->linked_lists[6]->value);
 
     return 0;
 }
