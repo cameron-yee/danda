@@ -3,8 +3,8 @@
 #include "linked_list.h"
 #include "hashtable.h"
 
-struct Table* table_new(size_t size) {
-    struct Table* new_table;
+struct Table *table_new(size_t size) {
+    struct Table *new_table;
 
     new_table = (struct Table*)malloc(sizeof(struct Table));
 
@@ -35,9 +35,9 @@ size_t get_hash_index(char *key) {
     return key_sum%10;
 }
 
-struct Node* compare_keys(struct Node* head, char *key) {
+struct Node *compare_keys(struct Node *head, char *key) {
     size_t same;
-    struct Node* temp;
+    struct Node *temp;
 
     temp = head;
 
@@ -64,10 +64,10 @@ struct Node* compare_keys(struct Node* head, char *key) {
     return NULL;
 }
 
-void add_value_to_table(struct Table** table, char *key, int value) {
+void add_value_to_table(struct Table **table, char *key, int value) {
     size_t hash_index;
-    struct Node* temp;
-    struct Node* hash_index_head;
+    struct Node *temp;
+    struct Node *hash_index_head;
 
     hash_index = get_hash_index(key);
 
@@ -81,7 +81,7 @@ void add_value_to_table(struct Table** table, char *key, int value) {
         if(temp != NULL) {
             temp->value = value;
         } else {
-            struct Node* spot = (*table)->linked_lists[hash_index];
+            struct Node *spot = (*table)->linked_lists[hash_index];
             add_node_to_head(&spot, key, value);
         }
     }
@@ -104,7 +104,7 @@ void add_value_to_table(struct Table** table, char *key, int value) {
 int main() {
     size_t index;
 
-    struct Table* table;
+    struct Table *table;
     //struct Node* table_head;
     //struct Node lists[10];
 

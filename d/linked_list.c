@@ -6,7 +6,7 @@ size_t length(char *list) {
     size_t i;
 
     i = 0;
-    while(list[i] != '\0') {
+    while (list[i] != '\0') {
         i++;
     }
 
@@ -14,8 +14,8 @@ size_t length(char *list) {
 }
 
 //TODO: pass in char * instead of []
-struct Node* node_new(char *key, int value) {
-    struct Node* new_node;
+struct Node *node_new(char *key, int value) {
+    struct Node *new_node;
     //char *key_pointer;
 
     //Malloc error on this line.
@@ -39,13 +39,13 @@ struct Node* node_new(char *key, int value) {
 }
 
 //TODO: pass in char * instead of []
-void add_node_to_head(struct Node** head, char *key, int value) {
-    struct Node* new_node;
+void add_node_to_head(struct Node **head, char *key, int value) {
+    struct Node *new_node;
 
     new_node = node_new(key, value);
 
     if(head == NULL) {
-        *head = new_node;
+        head = &new_node;
         return;
     }
 
@@ -54,13 +54,13 @@ void add_node_to_head(struct Node** head, char *key, int value) {
     (*head) = new_node;
 }
 
-void delete_node_from_memory(struct Node* node) {
+void delete_node_from_memory(struct Node *node) {
     if(node != NULL) {
         free(node);
     }
 }
 
-void delete_head_node(struct Node** head) {
+void delete_head_node(struct Node **head) {
     if(head == NULL) {
         return;
     }
@@ -70,9 +70,9 @@ void delete_head_node(struct Node** head) {
 }
 
 //TODO: pass in char * instead of []
-int get_node_data_by_lookup(struct Node* head, char *key) {
-    struct Node* temp;
-    struct Node* match;
+int get_node_data_by_lookup(struct Node *head, char *key) {
+    struct Node *temp;
+    struct Node *match;
 
     match = NULL;
     temp = head;
@@ -103,8 +103,8 @@ int get_node_data_by_lookup(struct Node* head, char *key) {
     return -1;
 }
 
-void print_list(struct Node* head) {
-    struct Node* temp;
+void print_list(struct Node *head) {
+    struct Node *temp;
 
     temp = head;
 
