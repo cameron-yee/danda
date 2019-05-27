@@ -3,6 +3,9 @@
 #include "linked_list.h"
 #include "hashtable.h"
 
+struct Node *compare_keys(struct Node *head, char *key);
+size_t get_hash_index(char *key);
+
 struct Table *table_new(size_t size) {
     struct Table *new_table;
 
@@ -15,6 +18,7 @@ struct Table *table_new(size_t size) {
 
     new_table->size = size;
 
+    //new_table->linked_lists = { NULL };
     for(size_t i = 0; i < size; i++) {
         new_table->linked_lists[i] = NULL;
     }
@@ -26,11 +30,9 @@ size_t get_hash_index(char *key) {
     size_t key_sum;
 
     key_sum = 0;
-    for(size_t i = 0; i < length(key); i++) {
+    for(size_t i = 0; i < ll_length(key); i++) {
         key_sum = key_sum + key[i];
     }
-
-    //printf("%lu\n", key_sum);
 
     return key_sum%10;
 }
@@ -43,7 +45,7 @@ struct Node *compare_keys(struct Node *head, char *key) {
 
     same = 1;
     while(temp != NULL) {
-        for(size_t x = 0; x < length(temp->key); x++) {
+        for(size_t x = 0; x < ll_length(temp->key); x++) {
             if(temp->key[x] != key[x]) {
                 same = 0;
                 break;
@@ -64,7 +66,7 @@ struct Node *compare_keys(struct Node *head, char *key) {
     return NULL;
 }
 
-void add_value_to_table(struct Table **table, char *key, int value) {
+void table_add_value(struct Table **table, char *key, int value) {
     size_t hash_index;
     struct Node *temp;
     struct Node *hash_index_head;
@@ -73,7 +75,6 @@ void add_value_to_table(struct Table **table, char *key, int value) {
 
     hash_index_head = (*table)->linked_lists[hash_index];
     if(hash_index_head == NULL) {
-        //printf("%lu\n", hash_index);
         (*table)->linked_lists[hash_index] = node_new(key, value);
     } else {
         temp = compare_keys((*table)->linked_lists[hash_index], key);
@@ -82,21 +83,29 @@ void add_value_to_table(struct Table **table, char *key, int value) {
             temp->value = value;
         } else {
             struct Node *spot = (*table)->linked_lists[hash_index];
-            add_node_to_head(&spot, key, value);
+            ll_add_node_to_head(&spot, key, value);
         }
     }
 }
 
 
-//int* get_value(struct Table** table, char key[]) {
-//    size_t value_index;
-//    struct Node* temp;
-//
-//    value_index = get_hash_index(key);
-//
-//
-//    temp = (*table)->linked_lists[value_index];
-//}
+int table_get_value_by_key(struct Table **table, char *key) {
+    size_t hash_index;
+    struct Node *hash_index_head;
+    struct Node *key_node;
+
+    hash_index = get_hash_index(key);
+
+    hash_index_head = (*table)->linked_lists[hash_index];
+
+    key_node = compare_keys(hash_index_head, key);
+
+    if(key_node != NULL) {
+       return key_node->value;
+    } else {
+        return -1;
+    }
+}
 
 //
 // gcc -Wall linked_list.c hashtable.c -o hashtable
@@ -105,35 +114,31 @@ int main() {
     size_t index;
 
     struct Table *table;
-    //struct Node* table_head;
-    //struct Node lists[10];
 
     char person[] = "Cameron"; //709, 9
     char person_2[] = "Jordan"; //606, 6
 
+    int person_value;
+
     index = get_hash_index(person);
 
-    //table_head = &lists[0];
-
-    //size_of_table = sizeof(table_head)/sizeof(struct Node);
     printf("1. %lu\n", index);
 
     table = table_new(10);
 
-    //for(size_t i = 0; i < 10; i++) {
-    //    printf("%lu: %d\n", i, table->linked_lists[i]->value);
-    //}
-
     printf("2. %lu\n", table->size);
 
-    add_value_to_table(&table, person, 1);
+    table_add_value(&table, person, 1);
     printf("3. %d\n", table->linked_lists[9]->value);
 
-    add_value_to_table(&table, person, 2);
+    table_add_value(&table, person, 2);
     printf("4. %d\n", table->linked_lists[9]->value);
 
-    add_value_to_table(&table, person_2, 3);
+    table_add_value(&table, person_2, 3);
     printf("5. %d\n", table->linked_lists[6]->value);
+
+    person_value = table_get_value_by_key(&table, person);
+    printf("6. %d\n", person_value);
 
     return 0;
 }

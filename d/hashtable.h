@@ -11,8 +11,7 @@ struct Table {
 };
 
 struct Table *table_new(size_t size);
-size_t get_hash_index(char *key);
-struct Node *compare_keys(struct Node *head, char *key);
-void add_value_to_table(struct Table **table, char *key, int value);
+void table_add_value(struct Table **table, char *key, int value);
+int table_get_value_by_key(struct Table **table, char *key);
 
 #endif

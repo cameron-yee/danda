@@ -10,10 +10,11 @@ struct Node {
     char *key;
 };
 
-size_t length(char list[]); 
+size_t ll_length(char *list); 
 struct Node *node_new(char key[], int value);
-void add_node_to_head(struct Node **head, char key[], int value);
-void print_list(struct Node *head);
-void delete_head_node(struct Node **head);
+void ll_add_node_to_head(struct Node **head, char key[], int value);
+void ll_print_list(struct Node *head);
+void ll_delete_head_node(struct Node **head);
+int ll_get_node_data_by_lookup(struct Node *head, char *key);
 
 #endif

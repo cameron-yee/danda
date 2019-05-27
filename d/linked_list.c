@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "linked_list.h"
 
-size_t length(char *list) {
+size_t ll_length(char *list) {
     size_t i;
 
     i = 0;
@@ -39,7 +39,7 @@ struct Node *node_new(char *key, int value) {
 }
 
 //TODO: pass in char * instead of []
-void add_node_to_head(struct Node **head, char *key, int value) {
+void ll_add_node_to_head(struct Node **head, char *key, int value) {
     struct Node *new_node;
 
     new_node = node_new(key, value);
@@ -54,23 +54,23 @@ void add_node_to_head(struct Node **head, char *key, int value) {
     (*head) = new_node;
 }
 
-void delete_node_from_memory(struct Node *node) {
+void ll_delete_node_from_memory(struct Node *node) {
     if(node != NULL) {
         free(node);
     }
 }
 
-void delete_head_node(struct Node **head) {
+void ll_delete_head_node(struct Node **head) {
     if(head == NULL) {
         return;
     }
 
     *head = (*head)->next;
-    delete_node_from_memory(*head);
+    ll_delete_node_from_memory(*head);
 }
 
 //TODO: pass in char * instead of []
-int get_node_data_by_lookup(struct Node *head, char *key) {
+int ll_get_node_data_by_lookup(struct Node *head, char *key) {
     struct Node *temp;
     struct Node *match;
 
@@ -82,7 +82,7 @@ int get_node_data_by_lookup(struct Node *head, char *key) {
         }
 
         //printf("%s, %s\n", key, temp->key);
-        for(size_t i = 0; i < length(key); i++) {
+        for(size_t i = 0; i < ll_length(key); i++) {
             printf("%d, %d\n", key[i], temp->key[i]);
             if(key[i] != temp->key[i]) {
                 match = NULL;
@@ -103,7 +103,7 @@ int get_node_data_by_lookup(struct Node *head, char *key) {
     return -1;
 }
 
-void print_list(struct Node *head) {
+void ll_print_list(struct Node *head) {
     struct Node *temp;
 
     temp = head;
