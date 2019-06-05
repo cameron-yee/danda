@@ -13,5 +13,6 @@ struct Table {
 struct Table *table_new(size_t size);
 void table_add_value(struct Table **table, char *key, int value);
 int table_get_value_by_key(struct Table **table, char *key);
+int table_delete_key(struct Table **table, char *key);
 
 #endif

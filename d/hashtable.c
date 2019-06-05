@@ -5,13 +5,14 @@
 
 struct Node *compare_keys(struct Node *head, char *key);
 size_t get_hash_index(char *key);
+size_t string_compare(char *one, char *two);
 
 struct Table *table_new(size_t size) {
     struct Table *new_table;
 
     new_table = (struct Table*)malloc(sizeof(struct Table));
 
-    if(new_table == NULL) {
+    if (new_table == NULL) {
         printf("Error in malloc.");
         exit(1);
     }
@@ -19,7 +20,7 @@ struct Table *table_new(size_t size) {
     new_table->size = size;
 
     //new_table->linked_lists = { NULL };
-    for(size_t i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; i++) {
         new_table->linked_lists[i] = NULL;
     }
 
@@ -30,11 +31,22 @@ size_t get_hash_index(char *key) {
     size_t key_sum;
 
     key_sum = 0;
-    for(size_t i = 0; i < ll_length(key); i++) {
+    for (size_t i = 0; i < ll_length(key); i++) {
         key_sum = key_sum + key[i];
     }
 
     return key_sum%10;
+}
+
+size_t string_compare(char *one, char *two) {
+
+    for (size_t i = 0; i < ll_length(one); i++) {
+        if (one[i] != two[i]) {
+            return 0;
+        }
+    }
+
+    return 1;
 }
 
 struct Node *compare_keys(struct Node *head, char *key) {
@@ -43,24 +55,16 @@ struct Node *compare_keys(struct Node *head, char *key) {
 
     temp = head;
 
-    same = 1;
-    while(temp != NULL) {
-        for(size_t x = 0; x < ll_length(temp->key); x++) {
-            if(temp->key[x] != key[x]) {
-                same = 0;
-                break;
-            }
-        }
+    //TODO: this is probably stupid. for loop nested in while loop.
+    same = 0;
+    while (temp != NULL) {
+        same = string_compare(temp->key, key);
 
         if(same == 1) {
-            break;
+            return temp;
         }
 
         temp = temp->next;
-    }
-
-    if(same == 1) {
-        return temp;
     }
 
     return NULL;
@@ -74,12 +78,12 @@ void table_add_value(struct Table **table, char *key, int value) {
     hash_index = get_hash_index(key);
 
     hash_index_head = (*table)->linked_lists[hash_index];
-    if(hash_index_head == NULL) {
+    if (hash_index_head == NULL) {
         (*table)->linked_lists[hash_index] = node_new(key, value);
     } else {
         temp = compare_keys((*table)->linked_lists[hash_index], key);
 
-        if(temp != NULL) {
+        if (temp != NULL) {
             temp->value = value;
         } else {
             struct Node *spot = (*table)->linked_lists[hash_index];
@@ -100,8 +104,33 @@ int table_get_value_by_key(struct Table **table, char *key) {
 
     key_node = compare_keys(hash_index_head, key);
 
-    if(key_node != NULL) {
+    if (key_node != NULL) {
        return key_node->value;
+    } else {
+        return -1;
+    }
+}
+
+//TODO: this isn't ready
+int table_delete_key(struct Table **table, char *key) {
+    int value;
+    size_t hash_index;
+    struct Node *hash_index_head;
+    struct Node *key_node;
+
+    hash_index = get_hash_index(key);
+
+    hash_index_head = (*table)->linked_lists[hash_index];
+
+    key_node = compare_keys(hash_index_head, key);
+
+    //TODO: How do I set the previous node->next to NULL?
+    if (key_node != NULL) {
+       value = key_node->value;
+       key_node = NULL;
+       free(key_node);
+
+       return value;
     } else {
         return -1;
     }
