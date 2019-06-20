@@ -5,21 +5,14 @@ void shift_merged_list(int *merged_list, int list_length, size_t position, int h
     int temp;
 
     for (size_t i = position; i < list_length; i++) {
-        for (size_t x = 0; x < list_length; x++) {
-            printf("%d ", merged_list[x]);
-        }
-
-        printf("\n");
-
-        temp = merged_list[position];
+        temp = merged_list[i];
 
         if (temp == 0) {
-            merged_list[position] = holder;
+            merged_list[i] = holder;
             break;
         }
 
-        printf("temp: %d\n", temp);
-        merged_list[position] = holder;
+        merged_list[i] = holder;
         holder = temp;
     }
 }
@@ -27,15 +20,12 @@ void shift_merged_list(int *merged_list, int list_length, size_t position, int h
 int *insert_into_list(int *merged_list, int list_length, size_t position, int value) {
     int holder;
     
-    //printf("value: %d\n", value);
-
     if (merged_list[position] == 0) {
         merged_list[position] = value;
         return merged_list;
     }
 
     holder = merged_list[position];
-    //printf("holder: %d\n", holder);
     merged_list[position] = value;
 
     shift_merged_list(merged_list, list_length, position + 1, holder);
@@ -44,10 +34,8 @@ int *insert_into_list(int *merged_list, int list_length, size_t position, int va
 }
 
 size_t find_insert_position(int *merged_list, size_t list_length, int value) {
-    //printf("%d, ", value);
     for (size_t i = 0; i < list_length; i++) {
         if (value <= merged_list[i] || merged_list[i] == 0) {
-            //printf("\n");
             return i;
         }
     }
@@ -78,7 +66,7 @@ void merge_sorted_lists(size_t x, size_t y, int unmerged_list[][y], int *merged_
 
 void print_merged_list(int *merged_list, size_t list_length) {
     for (size_t i = 0; i < list_length; i++) {
-        printf("%d, ", merged_list[i]);
+        printf("%d ", merged_list[i]);
     }
 
     printf("\n");
