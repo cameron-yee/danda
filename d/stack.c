@@ -1,52 +1,76 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
+#include "stack.h"
 
 //LIFO structure
 
-struct Node {
-    struct Node* next;
-    int data;
-};
+struct Node *get_new_node(int data);
+void free_node_memory(struct Node *node);
 
-struct Node* head;
+struct Node *get_new_node(int data) {
+    struct Node *new_node;
 
-struct Node* GetNewNode(int data) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode -> data = data;
-    newNode -> next = NULL;
-    return newNode;
-};
+    new_node = (struct Node*)malloc(sizeof(struct Node));
 
-void addNode(int data) {
-    struct Node* newNode = GetNewNode(data);
-    if(head == NULL) {
-        head = newNode;
-        return;
+    if (new_node == NULL) {
+        printf("Malloc failed in get_new_node");
+        exit(1);
     }
 
-    struct Node* temp = head;
-    while(temp -> next != NULL) {
+    new_node -> data = data;
+    new_node -> next = NULL;
+    return new_node;
+};
+
+void free_node_memory(struct Node *node) {
+    if (node != NULL) {
+        free(node);
+    }
+}
+
+struct Node *add_node(struct Node *head, int data) {
+    struct Node *new_node;
+    struct Node *temp;
+
+    new_node = get_new_node(data);
+
+    if (head == NULL) {
+        head = new_node;
+        return head;
+    }
+
+    temp = head;
+
+    while (temp -> next != NULL) {
         temp = temp -> next;
     }
 
-    temp -> next = newNode;
+    temp -> next = new_node;
+
+    return head;
 }
 
-void removeFromStack() {
-    if(head == NULL) {
-        return;
+struct Node *remove_from_stack(struct Node *head) {
+    struct Node *old;
+
+    if (head == NULL) {
+        return head;
     }
 
-    struct Node* old = head;
+    old = head;
     head = head -> next;
-    free(old);
+    free_node_memory(old);
+
+    return head;
 }
 
-void printStack() {
-    struct Node* temp = head;
+void print_stack(struct Node *head) {
+    struct Node *temp;
 
-    while(temp != NULL) {
+    temp = head;
+
+    while (temp != NULL) {
         printf("%d ", temp -> data);
         temp = temp -> next;
     }
@@ -55,17 +79,21 @@ void printStack() {
 }
 
 int main() {
+    struct Node *head;
+
     head = NULL;
 
-    addNode(1);
-    printStack();
+    head =add_node(head, 1);
+    print_stack(head);
 
-    addNode(2);
-    printStack();
+    head = add_node(head, 2);
+    print_stack(head);
 
-    addNode(3);
-    printStack();
+    head = add_node(head, 3);
+    print_stack(head);
 
-    removeFromStack();
-    printStack();
+    head = remove_from_stack(head);
+    print_stack(head);
+
+    return 0;
 }
