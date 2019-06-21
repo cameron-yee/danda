@@ -26,6 +26,7 @@ struct Node *get_new_node(int data) {
 void free_node_memory(struct Node *node) {
     if (node != NULL) {
         free(node);
+        node = NULL;
     }
 }
 
