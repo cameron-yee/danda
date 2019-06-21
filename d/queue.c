@@ -1,36 +1,44 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<stdbool.h>
+#include "queue.h"
+
+struct Node *node_new(int data);
+int queue_get_head_data(struct Node **head);
+void node_delete(struct Node *node); 
 
 
-struct Node {
-    int data;
-    struct Node* next;
-};
+void node_delete(struct Node *node) {
+    if (node != NULL) {
+        free(node);
+        node = NULL;
+    }
+}
 
-struct Node* node_new(int data) {
-    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+struct Node *node_new(int data) {
+    struct Node *new_node = (struct Node*)malloc(sizeof(struct Node));
     new_node->data = data;
     new_node->next = NULL;
     return new_node;
 };
 
-bool IsEmpty(struct Node** head) {
+int queue_is_empty(struct Node **head) {
     return head == NULL;
 }
 
-int peek(struct Node** head) {
-    if(head != NULL) {
+int queue_get_head_data(struct Node **head) {
+    if (head != NULL) {
         return (*head)->data;
     } else {
         return -1;
     }
 }
 
-void add(struct Node** head, struct Node** tail, int data) {
-    struct Node* new_node = node_new(data);
+void queue_add_node(struct Node **head, struct Node **tail, int data) {
+    struct Node *new_node;
 
-    if(tail != NULL) {
+    new_node = node_new(data);
+
+    if (tail != NULL) {
         (*tail)->next = new_node;
     }
 
@@ -40,23 +48,28 @@ void add(struct Node** head, struct Node** tail, int data) {
     }
 }
 
-int removeHead(struct Node** head, struct Node** tail) {
-    int data = (*head)->data;
-    struct Node* old = *head;
-    *head = (*head)->next;
-    free(old);
+int queue_remove_head(struct Node **head, struct Node **tail) {
+    int data;
+    struct Node *old;
 
-    if(head == NULL) {
+    data = (*head)->data;
+    old = *head;
+    *head = (*head)->next;
+    node_delete(old);
+
+    if (head == NULL) {
         *tail = NULL;
     }
 
     return data;
 }
 
-void printQueue(struct Node** head) {
-    struct Node* temp = *head;
+void print_queue(struct Node **head) {
+    struct Node *temp;
 
-    while(temp->next != NULL) {
+    temp = *head;
+
+    while (temp->next != NULL) {
         printf("%d ", temp->data);
         temp = temp->next;
     }
@@ -65,24 +78,24 @@ void printQueue(struct Node** head) {
 }
 
 int main() {
-    struct Node* head;
-    struct Node* tail;
+    struct Node *head;
+    struct Node *tail;
 
     head = node_new(1);
     tail = head;
 
-    add(&head, &tail, 1);
-    add(&head, &tail, 2);
-    add(&head, &tail, 3);
+    queue_add_node(&head, &tail, 1);
+    queue_add_node(&head, &tail, 2);
+    queue_add_node(&head, &tail, 3);
 
-    printQueue(&head);
+    print_queue(&head);
 
-    removeHead(&head, &tail);
+    queue_remove_head(&head, &tail);
 
-    printQueue(&head);
+    print_queue(&head);
 
-    int headData = peek(&head);
-    printf("headData: %d", headData);
+    int head_data = queue_get_head_data(&head);
+    printf("headData: %d\n", head_data);
 
     return 0;
 }
