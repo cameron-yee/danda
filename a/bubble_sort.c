@@ -8,11 +8,11 @@ int *sort(int *list, int length) {
     size_t is_sorted;
 
     is_sorted = 0;
-    while(is_sorted == 0) {
+    while (is_sorted == 0) {
         size_t hit = 1;
         //printf("%lu", sizeof(list)/sizeof(list[0]));
         //for(size_t i = 0; i < sizeof(list)/sizeof(list[0]) - 1; i++) {
-        for(size_t i = 0; i < length - 1; i++) {
+        for (size_t i = 0; i < length - 1; i++) {
             if(list[i] > list[i + 1]) {
                 int n = list[i];
                 list[i] = list[i+1];
@@ -29,7 +29,7 @@ int *sort(int *list, int length) {
 
 void printList(int *list, int length) {
     //for(size_t i = 0; i < (sizeof(list)/sizeof(list[0])); i++) {
-    for(size_t i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++) {
         printf("%d ", list[i]);
     }
 
