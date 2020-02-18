@@ -11,7 +11,7 @@ int *insert_at_position(int *list, size_t list_length;  size_t position, int val
     for (size_t i = position; i < list_length; i++) {
         temp = list[i+1];
         list[i+1] = list[i];
-        
+
     }
 }
 
@@ -57,8 +57,8 @@ int *merge_sorted_lists(int *sorted_lists, size_t x, size_t y) {
 
 int main() {
     int sorted_lists[3][3] = {
-        {10, 15, 30},    
-        {12, 15, 20}
+        {10, 15, 30},
+        {12, 15, 20},
         {17, 20, 32}
     };
 
