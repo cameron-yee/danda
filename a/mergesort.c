@@ -1,44 +1,55 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
-void merge(int *arr, size_t arr_length, int *temp, size_t left_start, size_t right_end) {
-    size_t left_end, right_start, size, left, right, index;
+void merge(int *arr, size_t left_start, size_t middle, size_t right_end) {
+    size_t i, j, k;
+    size_t left_size, right_size;
 
-    left_end = (right_end + left_start) / 2;
-    right_start = left_end + 1; 
-    size = right_end - left_start + 1;
+    left_size = middle - left_start + 1;
+    right_size = right_end - middle; 
+    
+    int left_temp[left_size];
+    int right_temp[right_size];
 
-    left = left_start;
-    right = right_start;
-    index = left_start;
-
-    while (left <= left_end && right <= right_end) {
-        if (arr[left] <= arr[right]) {
-            temp[index] = arr[left];
-            left++;
-        } else {
-            temp[index] = arr[right];
-            right++;
-        }
-
-        index++;
-    }
-
-    for (size_t i = left; i <= left_end; i++, index++) {
-        temp[index] = arr[i];
+    for (i = 0; i <= left_size; i++) {
+        left_temp[i] = arr[left_start + i];
     }
     
-    for (size_t i = right; i <= right_end; i++, index++) {
-        temp[index] = arr[i];
+    for (j = 0; j <= right_size; j++) {
+        right_temp[j] = arr[middle + 1 + j];
     }
 
-    //TODO: pretty sure this is the culprit
-    for (size_t i = left_start; i < size - 1; i++) {
-        arr[i] = temp[i];
+    i = 0;
+    j = 0;
+    k = left_start;
+
+    while (i < left_size && j < right_size) {
+        if (left_temp[i] <= right_temp[j]) {
+            arr[k] = left_temp[i];
+            i++;
+        } else {
+            arr[k] = right_temp[j];
+            j++;
+        }
+
+        k++;
+    } 
+
+    while (i < left_size) {
+        arr[k] = left_temp[i];
+        i++;
+        k++;
+    }
+    
+    while (j < right_size) {
+        arr[k] = right_temp[j];
+        j++;
+        k++;
     }
 }
 
-void sort(int *arr, size_t arr_length, int *temp, size_t left_start, size_t right_end) {
+void sort(int *arr, size_t left_start, size_t right_end) {
     size_t middle;
 
     if (left_start >= right_end) {
@@ -46,27 +57,59 @@ void sort(int *arr, size_t arr_length, int *temp, size_t left_start, size_t righ
     }
 
     middle = (left_start + right_end) / 2;
-    sort(arr, arr_length, temp, left_start, middle);
-    sort(arr, arr_length, temp, middle + 1, right_end);
-    merge(arr, arr_length, temp, left_start, right_end);
-}
-
-void msort(int *arr, size_t arr_length) {
-    int temp[arr_length];
     
-    sort(arr, arr_length, temp, 0, arr_length - 1);
+    sort(arr, left_start, middle);
+    sort(arr, middle + 1, right_end);
+    
+    merge(arr, left_start, middle, right_end);
 }
 
-int main() {
-    int arr[10] = {4,3,8,1,2,0,7,5,9,6};
+void msort(int *arr, int arr_size) {
+    sort(arr, 0, arr_size - 1);
+}
 
-    msort(arr, 10);
+int * getTestArray(int number) {
+    int *r;
+    int i;
 
-    for (size_t i = 0; i < 10; i++) {
-        printf("%d, ", arr[i]);
+    r = malloc(number * sizeof(int)); 
+    if (r == NULL) {
+        exit(1);
     }
 
-    printf("\n");
-     
+    /* set the seed */
+    srand((unsigned)time( NULL ));
+
+    for (i = 0; i < number; i++) {
+        r[i] = rand() % 10;
+    }
+
+    return r;
+}
+                                           
+int main(int argc, char *argv[]) {
+    int *arr;
+    int number; 
+    clock_t start, end;
+    double cpu_time_used;
+
+    if (argc < 2) {
+        printf("Provide a number dangit.\n");
+        return 1;
+    }
+
+    number = atoi(argv[1]);
+    arr = getTestArray(number); 
+    
+    printf("%d\n", number);
+
+    start = clock(); 
+    msort(arr, number);
+    end = clock(); 
+    free(arr);
+    
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("%fs\n", cpu_time_used);
+         
     return 0;
 }
