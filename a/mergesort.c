@@ -2,34 +2,42 @@
 #include <stdio.h>
 #include <time.h>
 
-void merge(int *arr, size_t left_start, size_t middle, size_t right_end) {
+void merge(int *arr, size_t left, size_t middle, size_t right) {
     size_t i, j, k;
     size_t left_size, right_size;
 
-    left_size = middle - left_start + 1;
-    right_size = right_end - middle; 
+    left_size = middle - left + 1;
+    right_size = right - middle; 
     
-    int left_temp[left_size];
-    int right_temp[right_size];
+    // int L[left_size];
+    // int R[right_size];
+    int *L = malloc(left_size * sizeof(int));
+    if (L == NULL) {
+        exit(1);
+    }
+    int *R = malloc(right_size * sizeof(int));
+    if (R == NULL) {
+        exit(1);
+    }
 
-    for (i = 0; i <= left_size; i++) {
-        left_temp[i] = arr[left_start + i];
+    for (i = 0; i < left_size; i++) {
+        L[i] = arr[left + i];
     }
     
-    for (j = 0; j <= right_size; j++) {
-        right_temp[j] = arr[middle + 1 + j];
+    for (j = 0; j < right_size; j++) {
+        R[j] = arr[middle + 1 + j];
     }
 
     i = 0;
     j = 0;
-    k = left_start;
+    k = left;
 
     while (i < left_size && j < right_size) {
-        if (left_temp[i] <= right_temp[j]) {
-            arr[k] = left_temp[i];
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
             i++;
         } else {
-            arr[k] = right_temp[j];
+            arr[k] = R[j];
             j++;
         }
 
@@ -37,31 +45,34 @@ void merge(int *arr, size_t left_start, size_t middle, size_t right_end) {
     } 
 
     while (i < left_size) {
-        arr[k] = left_temp[i];
+        arr[k] = L[i];
         i++;
         k++;
     }
     
     while (j < right_size) {
-        arr[k] = right_temp[j];
+        arr[k] = R[j];
         j++;
         k++;
     }
+
+    free(L);
+    free(R);
 }
 
-void sort(int *arr, size_t left_start, size_t right_end) {
+void sort(int *arr, size_t left, size_t right) {
     size_t middle;
 
-    if (left_start >= right_end) {
+    if (left >= right) {
         return;
     }
 
-    middle = (left_start + right_end) / 2;
+    middle = left + (right - left) / 2;
     
-    sort(arr, left_start, middle);
-    sort(arr, middle + 1, right_end);
-    
-    merge(arr, left_start, middle, right_end);
+    sort(arr, left, middle);
+    sort(arr, middle + 1, right);
+     
+    merge(arr, left, middle, right);
 }
 
 void msort(int *arr, int arr_size) {
